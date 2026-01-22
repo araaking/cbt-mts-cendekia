@@ -132,9 +132,15 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
             </div>
           </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={toggleActive} className="gap-2">
-            <Power className="h-4 w-4" />
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild>
+            <Link href={`/tests/${testId}/import`}>Import Soal (Word)</Link>
+          </Button>
+          <Button
+            variant={test.isActive ? "destructive" : "default"}
+            onClick={toggleActive}
+          >
+            <Power className="mr-2 h-4 w-4" />
             {test.isActive ? "Nonaktifkan" : "Aktifkan"}
           </Button>
           <Button variant="destructive" onClick={() => setShowDeleteDialog(true)} disabled={hasResults}>
