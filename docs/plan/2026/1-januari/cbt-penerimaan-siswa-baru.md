@@ -657,3 +657,25 @@ cbt-mts-cendekia/
 - Admin & Guru panel butuh login dengan Better Auth
 - Admin memiliki akses penuh ke semua fitur
 - Guru memiliki akses terbatas (hanya tes yang diassign)
+
+---
+
+## Penyesuaian Hasil Diskusi (Januari 2026)
+
+### 1. Keamanan & Integritas Sesi Siswa
+- Meskipun tes dilakukan di sekolah dan tanpa login, sistem akan menggunakan **Unique Session Token** (disimpan di LocalStorage atau Cookie) setelah siswa mengisi data diri.
+- Jika browser tertutup atau terjadi kendala teknis, siswa dapat melanjutkan tes yang sama selama token masih valid dan waktu belum habis (Auto-resume).
+
+### 2. Dukungan Media pada Soal
+- Update pada model `Question`: Menambahkan field `image` (String, opsional) untuk mendukung soal bergambar, terutama untuk soal Matematika atau IPA tingkat SD.
+
+### 3. Integritas Data & Kebijakan Edit
+- Guru atau Admin dilarang untuk mengedit atau menghapus soal jika tes tersebut sedang aktif (`isActive: true`) atau sudah memiliki data hasil siswa (`Result`).
+- Tombol edit akan di-disable untuk mencegah inkonsistensi nilai siswa.
+
+### 4. Monitoring Real-time (Schema Result)
+- Update pada model `Result`: Menambahkan field `status` dengan tipe Enum `TestStatus`:
+    - `IN_PROGRESS`: Sedang mengerjakan.
+    - `FINISHED`: Selesai secara manual oleh siswa.
+    - `TIMED_OUT`: Selesai otomatis karena waktu habis.
+- Hal ini mempermudah monitoring progres siswa di Dashboard Admin secara real-time.
