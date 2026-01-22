@@ -507,61 +507,61 @@ cbt-mts-cendekia/
 ## Todo List Implementasi
 
 ### Fase 1: Setup & Konfigurasi
-- [ ] Install Prisma 7 dan setup database
-- [ ] Setup Better Auth
-- [ ] Setup shadcn/ui (init, add components)
-- [ ] Buat Prisma schema lengkap
-- [ ] Jalankan migration database
-- [ ] Setup environment variables (.env)
-- [ ] Buat struktur direktori
+- [x] Install Prisma 7 dan setup database
+- [x] Setup Better Auth
+- [x] Setup shadcn/ui (init, add components)
+- [x] Buat Prisma schema lengkap
+- [x] Jalankan migration database
+- [x] Setup environment variables (.env)
+- [x] Buat struktur direktori
 
 ### Fase 2: Backend API
-- [ ] Implementasi Better Auth (login admin)
-- [ ] API: Register siswa (simpan data diri)
-- [ ] API: Start tes (ambil soal, set timer)
-- [ ] API: Submit jawaban (simpan progress)
-- [ ] API: Finish tes (hitung skor, simpan hasil)
-- [ ] API: CRUD Tes (admin)
-- [ ] API: CRUD Soal (admin)
-- [ ] API: Get hasil tes (admin)
+- [x] Implementasi Better Auth (login admin)
+- [x] API: Register siswa (simpan data diri)
+- [x] API: Start tes (ambil soal, set timer)
+- [x] API: Submit jawaban (simpan progress)
+- [x] API: Finish tes (hitung skor, simpan hasil)
+- [x] API: CRUD Tes (admin)
+- [x] API: CRUD Soal (admin)
+- [x] API: Get hasil tes (admin)
 
 ### Fase 3: Frontend - Siswa
-- [ ] Halaman landing / home
-- [ ] Form data diri siswa (validasi)
-- [ ] Halaman pilih tes aktif
-- [ ] Halaman tes dengan:
+- [x] Halaman landing / home
+- [x] Form data diri siswa (validasi)
+- [x] Halaman pilih tes aktif
+- [x] Halaman tes dengan:
   - Timer countdown
   - Navigasi soal (prev/next)
   - Daftar nomor soal
   - Auto-save jawaban
   - Konfirmasi selesai
-- [ ] Halaman hasil tes (score, review jawaban)
+- [x] Halaman hasil tes (score, review jawaban)
 
 ### Fase 4: Frontend - Admin
-- [ ] Login admin
-- [ ] Dashboard overview
-- [ ] Manajemen Tes:
+- [x] Login admin
+- [x] Dashboard overview
+- [x] Manajemen Tes:
   - List tes
   - Buat tes baru
   - Edit tes
   - Aktifkan/nonaktifkan tes
-- [ ] Manajemen Soal:
+- [x] Manajemen Soal:
   - List soal per tes
   - Tambah soal
   - Edit soal
   - Hapus soal
   - Reorder soal
-- [ ] Lihat Hasil:
+- [x] Lihat Hasil:
   - List semua hasil
   - Detail hasil per siswa
   - Export data (CSV/Excel)
 
 ### Fase 5: Fitur Tambahan
 - [ ] Validasi form dengan Zod
-- [ ] Toast notifications
-- [ ] Loading states
-- [ ] Error handling
-- [ ] Responsive design (mobile-friendly)
+- [x] Toast notifications
+- [x] Loading states
+- [x] Error handling
+- [x] Responsive design (mobile-friendly)
 - [ ] Security (rate limiting, input sanitization)
 
 ### Fase 6: Testing & Deployment

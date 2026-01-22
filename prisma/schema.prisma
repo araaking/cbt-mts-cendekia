@@ -1,0 +1,167 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// User (Admin/Guru)
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  emailVerified Boolean?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Custom fields
+  role          Role      @default(ADMIN)
+  tests         Test[]
+
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+// Tes
+model Test {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  duration    Int      // dalam menit
+  isActive    Boolean  @default(false)
+  startDate   DateTime?
+  endDate     DateTime?
+  
+  // Relations
+  authorId    String?
+  author      User?    @relation(fields: [authorId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  questions   Question[]
+  results     Result[]
+}
+
+// Soal
+model Question {
+  id          String   @id @default(cuid())
+  testId      String
+  test        Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+  question    String
+  image       String?  // Gambar pada soal (Optional)
+  options     Json     // ["A", "B", "C", "D"]
+  correctAnswer String // "A", "B", "C", atau "D"
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  answers     Answer[]
+}
+
+// Hasil Tes Siswa
+model Result {
+  id          String   @id @default(cuid())
+  testId      String
+  test        Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+  
+  // Data Diri Siswa
+  studentName String
+  studentNISN String?
+  studentEmail String?
+  studentPhone String?
+  
+  // Hasil Tes
+  score       Int      @default(0)
+  totalQuestions Int   @default(0)
+  correctAnswers Int   @default(0)
+  timeSpent   Int      @default(0) // dalam detik
+  
+  // Status & Timing
+  status      TestStatus @default(IN_PROGRESS)
+  startedAt   DateTime   @default(now())
+  finishedAt  DateTime?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  answers     Answer[]
+}
+
+// Jawaban Siswa
+model Answer {
+  id          String   @id @default(cuid())
+  resultId    String
+  result      Result   @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  questionId  String
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedAnswer String
+  isCorrect   Boolean
+  createdAt   DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  GURU
+}
+
+enum TestStatus {
+  IN_PROGRESS
+  FINISHED
+  TIMED_OUT
+}
