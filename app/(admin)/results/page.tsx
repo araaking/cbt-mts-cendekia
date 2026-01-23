@@ -43,7 +43,7 @@ export default async function ResultsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {results.map((r) => {
+                {results.map((r: any) => {
                   const status = statusMap[r.status as keyof typeof statusMap]
                   const minutes = Math.floor(r.timeSpent / 60)
                   const seconds = r.timeSpent % 60
