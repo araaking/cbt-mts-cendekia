@@ -1,6 +1,6 @@
 import { resultRepository } from "../repositories/result.repository";
 import { questionRepository } from "../../question/repositories/question.repository";
-import { Prisma, TestStatus } from "@prisma/client";
+import { TestStatus } from "@prisma/client";
 
 export class ResultService {
   async startTest(testId: string, studentData: { name: string; nisn?: string; email?: string; phone?: string }) {

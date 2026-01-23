@@ -15,7 +15,7 @@ export async function GET() {
   try {
     const users = await userService.getAllUsers();
     return NextResponse.json(users);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     // WARNING: This blindly saves password. In a real app, hash it!
     const user = await userService.createUser(body);
     return NextResponse.json(user);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

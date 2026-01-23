@@ -19,13 +19,22 @@ export class TestService {
   }
 
   async updateTest(id: string, data: Prisma.TestUpdateInput) {
-    // Validate dates if both are present in update
-    // Note: This is a simple check, a robust one would check against existing DB values if only one is updated
-    if (data.startDate && data.endDate && typeof data.startDate === 'object' && typeof data.endDate === 'object') {
-       // @ts-ignore - Prisma types for dates can be complex (Date | string | FieldUpdateOperationsInput)
-       if (data.startDate > data.endDate) {
-         throw new Error("Start date cannot be after end date");
-       }
+    const getDateValue = (value: Prisma.TestUpdateInput["startDate"]) => {
+      if (!value) return null;
+      if (value instanceof Date) return value;
+      if (typeof value === "string") return new Date(value);
+      if (typeof value === "object" && "set" in value) {
+        const setValue = value.set;
+        if (setValue instanceof Date) return setValue;
+        if (typeof setValue === "string") return new Date(setValue);
+      }
+      return null;
+    };
+
+    const startDate = getDateValue(data.startDate);
+    const endDate = getDateValue(data.endDate);
+    if (startDate && endDate && startDate > endDate) {
+      throw new Error("Start date cannot be after end date");
     }
     return testRepository.update(id, data);
   }

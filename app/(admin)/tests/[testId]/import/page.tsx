@@ -52,7 +52,7 @@ export default function ImportPage({ params }: { params: Promise<{ testId: strin
       const data = await res.json();
       parseHtmlToQuestions(data.html);
       setStep("preview");
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Gagal memproses file DOCX",
@@ -151,7 +151,6 @@ export default function ImportPage({ params }: { params: Promise<{ testId: strin
         // Note: Code di atas jalan di browser (client side), jadi aman.
         
         // Implementasi pembersihan prefix opsi:
-        const cleanText = text.replace(optionPattern, "").trim();
         // Hacky way to replace content but keep tags (like images in option? unlikely but possible)
         // Let's just strip the pattern from the HTML string loosely
         // cleanHtml = htmlContent.replace(optionPattern, ""); // This might fail if pattern matches inside tag attributes? Unlikely.
@@ -251,7 +250,7 @@ export default function ImportPage({ params }: { params: Promise<{ testId: strin
             description: `${parsedQuestions.length} soal berhasil disimpan!`,
         });
         router.push(`/admin/tests/${testId}`);
-    } catch (error) {
+    } catch {
         toast({
             title: "Error",
             description: "Gagal menyimpan soal ke database",

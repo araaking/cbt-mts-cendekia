@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Upload, X, Image as ImageIcon } from "lucide-react";
+import { Loader2, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type QuestionFormData = {
@@ -64,7 +64,7 @@ export function QuestionForm({ testId, initialData, mode }: QuestionFormProps) {
       const data = await res.json();
       setFormData({ ...formData, image: data.url });
       toast({ title: "Berhasil", description: "Gambar berhasil diupload" });
-    } catch (error) {
+    } catch {
       toast({ 
         title: "Error", 
         description: "Gagal mengupload gambar", 

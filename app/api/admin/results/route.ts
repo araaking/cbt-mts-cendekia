@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const results = await resultService.getAllResults();
     return NextResponse.json(results);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

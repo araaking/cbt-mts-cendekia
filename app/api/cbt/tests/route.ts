@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const tests = await testService.getAvailableTests();
     return NextResponse.json(tests);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

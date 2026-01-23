@@ -10,7 +10,7 @@ const config = {
 	dkLen: 64
 };
 
-async function generateKey(password, salt) {
+async function generateKey(password: string, salt: string) {
 	return await scryptAsync(password.normalize("NFKC"), salt, {
 		N: config.N,
 		p: config.p,
@@ -20,7 +20,7 @@ async function generateKey(password, salt) {
 	});
 }
 
-const hashPassword = async (password) => {
+const hashPassword = async (password: string) => {
 	const salt = hex.encode(crypto.getRandomValues(new Uint8Array(16)));
 	const key = await generateKey(password, salt);
 	return `${salt}:${hex.encode(key)}`;

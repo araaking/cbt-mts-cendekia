@@ -22,7 +22,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ resultId
         description: result.test?.description || "",
       },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

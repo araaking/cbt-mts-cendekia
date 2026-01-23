@@ -34,9 +34,10 @@ export async function GET(req: Request) {
     const questions = await questionService.getQuestionsByTestId(result.testId);
 
     // Remove correct answers from response!!! Critical for security.
-    const sanitizedQuestions = questions.map(q => {
-        const { correctAnswer, ...rest } = q;
-        return rest;
+    const sanitizedQuestions = questions.map((q) => {
+      const { correctAnswer, ...rest } = q;
+      void correctAnswer;
+      return rest;
     });
 
     return NextResponse.json({

@@ -1,7 +1,5 @@
 import mammoth from "mammoth";
 import AdmZip from "adm-zip";
-import fs from "fs";
-import path from "path";
 
 const filePath = "/Users/alfian/Code/cbt-mts-cendekia/docs/SOAL-TES-PPDB.docx";
 

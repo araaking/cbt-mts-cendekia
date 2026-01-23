@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, ArrowRight, BookOpen, AlertCircle } from "lucide-react";
+import { Clock, ArrowRight, BookOpen } from "lucide-react";
 import { testService } from "@/features/test/services/test.service";
 
 export const dynamic = "force-dynamic";

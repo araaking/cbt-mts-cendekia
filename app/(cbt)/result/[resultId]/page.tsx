@@ -4,7 +4,7 @@ import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Home, FileText, Loader2, ArrowRight } from "lucide-react";
+import { CheckCircle, Home, FileText, Loader2 } from "lucide-react";
 
 type ResultData = {
   // score: number; // Hidden

@@ -1,4 +1,5 @@
 import { questionRepository } from "../repositories/question.repository";
+import { Prisma } from "@prisma/client";
 
 export class QuestionService {
   async getQuestionsByTestId(testId: string) {

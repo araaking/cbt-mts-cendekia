@@ -87,10 +87,11 @@ export default function RegisterForm({ availableTests }: { availableTests: Test[
 
             // Redirect to test
             router.push(`/test/${selectedTestId}`);
-        } catch (error: any) {
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "Gagal registrasi";
             toast({
                 title: "Gagal",
-                description: error.message,
+                description: message,
                 variant: "destructive"
             });
         } finally {

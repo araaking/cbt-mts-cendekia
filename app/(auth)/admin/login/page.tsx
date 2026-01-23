@@ -140,7 +140,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <h2 className="text-4xl font-bold tracking-tight">Keamanan & Integritas</h2>
             <p className="text-lg text-blue-100/90 leading-relaxed">
-              "Sistem CBT kami didesain untuk menjamin keamanan data dan integritas ujian dengan teknologi enkripsi terkini."
+              &ldquo;Sistem CBT kami didesain untuk menjamin keamanan data dan integritas ujian dengan teknologi enkripsi terkini.&rdquo;
             </p>
           </div>
 

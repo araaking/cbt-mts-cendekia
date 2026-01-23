@@ -71,7 +71,7 @@ export default function ExamPage({ params }: { params: Promise<{ testId: string 
         }
         const data = await res.json();
         setSession(data);
-      } catch (error) {
+      } catch {
         toast({ title: "Error", description: "Gagal terhubung ke server.", variant: "destructive" });
         router.push("/");
       } finally {
@@ -101,7 +101,7 @@ export default function ExamPage({ params }: { params: Promise<{ testId: string 
           selectedAnswer: answer
         })
       });
-    } catch (e) {
+    } catch {
       console.error("Failed to save answer");
     }
   };
@@ -122,7 +122,7 @@ export default function ExamPage({ params }: { params: Promise<{ testId: string 
       } else {
         throw new Error("Gagal menyelesaikan ujian");
       }
-    } catch (error) {
+    } catch {
       toast({ title: "Error", description: "Gagal mengirim jawaban.", variant: "destructive" });
       setIsSubmitting(false);
       setShowConfirmFinish(false);

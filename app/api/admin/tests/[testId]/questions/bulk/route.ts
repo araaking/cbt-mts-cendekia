@@ -4,6 +4,12 @@ import { auth } from "@/shared/lib/auth";
 import { headers } from "next/headers";
 import { uploadToR2 } from "@/shared/lib/storage";
 
+type BulkQuestion = {
+  question: string;
+  options: string[];
+  correctAnswer?: string | null;
+};
+
 // Helper to extract Base64 images from HTML, upload to R2, and replace with URL
 async function processHtmlImages(html: string): Promise<string> {
   const imgRegex = /<img[^>]+src="data:image\/([^;]+);base64,([^"]+)"[^>]*>/g;
@@ -69,7 +75,7 @@ export async function POST(
     }
 
     const { testId } = await params;
-    const body = await req.json();
+    const body = (await req.json()) as { questions?: BulkQuestion[] };
     const { questions } = body;
 
     if (!Array.isArray(questions)) {
@@ -85,10 +91,10 @@ export async function POST(
       _max: { order: true },
     });
     
-    let startOrder = (maxOrder._max.order || 0) + 1;
+    const startOrder = (maxOrder._max.order || 0) + 1;
 
     // Process questions concurrently to upload images
-    const processedQuestions = await Promise.all(questions.map(async (q: any, idx: number) => {
+    const processedQuestions = await Promise.all(questions.map(async (q, idx: number) => {
         // Process Question HTML
         const cleanQuestion = await processHtmlImages(q.question);
         

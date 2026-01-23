@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const tests = await testService.getAllTests(true); // includeInactive = true for admin
     return NextResponse.json(tests);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const test = await testService.createTest(body);
     return NextResponse.json(test);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

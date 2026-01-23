@@ -2,9 +2,6 @@ import Link from "next/link";
 import {
   GraduationCap,
   ArrowRight,
-  BookOpen,
-  Clock,
-  CheckCircle,
   ShieldCheck,
   Zap,
   LayoutDashboard

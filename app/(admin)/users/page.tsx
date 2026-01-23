@@ -53,7 +53,7 @@ export default function UsersPage() {
         }
       })
       .finally(() => setIsLoading(false))
-  }, [])
+  }, [router, toast])
 
   const handleAdd = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

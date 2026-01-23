@@ -12,7 +12,7 @@ export async function GET(req: Request) {
 
     const questions = await questionService.getQuestionsByTestId(testId);
     return NextResponse.json(questions);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
