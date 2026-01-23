@@ -3,29 +3,19 @@ import { FileText, Users, ClipboardList, TrendingUp } from "lucide-react"
 import { testService } from "@/features/test/services/test.service"
 import { userService } from "@/features/user/services/user.service"
 import { resultService } from "@/features/result/services/result.service"
-import { Prisma, User } from "@prisma/client"
 
 export const dynamic = "force-dynamic"
 
-type TestWithStats = Prisma.TestGetPayload<{
-  include: {
-    questions: { select: { id: true } }
-    results: { select: { id: true } }
-  }
-}>
-
-type ResultWithTestTitle = Prisma.ResultGetPayload<{
-  include: {
-    test: { select: { title: true } }
-  }
-}>
+type TestWithStats = Awaited<ReturnType<typeof testService.getAllTests>>[number]
+type UserItem = Awaited<ReturnType<typeof userService.getAllUsers>>[number]
+type ResultWithTestTitle = Awaited<ReturnType<typeof resultService.getAllResults>>[number]
 
 export default async function DashboardPage() {
   const [tests, users, results] = await Promise.all([
     testService.getAllTests(true),
     userService.getAllUsers(),
     resultService.getAllResults(),
-  ]) as [TestWithStats[], User[], ResultWithTestTitle[]]
+  ]) as [TestWithStats[], UserItem[], ResultWithTestTitle[]]
 
   const activeTests = tests.filter((t) => t.isActive).length
   const avgScore = results.length > 0
