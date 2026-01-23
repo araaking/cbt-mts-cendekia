@@ -43,7 +43,22 @@ export class UserService {
     return userRepository.create(prismaData);
   }
 
-  async updateUser(id: string, data: Prisma.UserUpdateInput) {
+  async updateUser(id: string, data: Prisma.UserUpdateInput & { password?: string }) {
+    if (data.password) {
+      const hashedPassword = await hashPassword(data.password);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...userData } = data;
+
+      return userRepository.update(id, {
+        ...userData,
+        accounts: {
+          updateMany: {
+            where: { providerId: "credential" },
+            data: { password: hashedPassword },
+          },
+        },
+      });
+    }
     return userRepository.update(id, data);
   }
 

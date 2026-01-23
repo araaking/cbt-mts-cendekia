@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Plus, Trash2, Loader2 } from "lucide-react"
+import { Plus, Trash2, Loader2, Pencil } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import {
@@ -35,6 +35,8 @@ export default function UsersPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [editUser, setEditUser] = useState<User | null>(null)
+  const [showEditDialog, setShowEditDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -99,6 +101,39 @@ export default function UsersPage() {
     }
   }
 
+  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!editUser) return
+    setIsSubmitting(true)
+
+    const formData = new FormData(e.currentTarget)
+    const data: any = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      role: formData.get("role"),
+    }
+    const password = formData.get("password")
+    if (password) data.password = password
+
+    try {
+      const res = await fetch(`/api/admin/users/${editUser.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+      if (!res.ok) throw new Error()
+      const updatedUser = await res.json()
+      setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)))
+      setShowEditDialog(false)
+      toast({ title: "Berhasil", description: "User berhasil diupdate" })
+    } catch {
+      toast({ title: "Error", description: "Gagal mengupdate user", variant: "destructive" })
+    } finally {
+      setIsSubmitting(false)
+      setEditUser(null)
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -150,9 +185,17 @@ export default function UsersPage() {
                     </TableCell>
                     <TableCell>{new Date(user.createdAt).toLocaleDateString("id-ID")}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size="icon" onClick={() => setDeleteId(user.id)}>
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" size="icon" onClick={() => {
+                          setEditUser(user)
+                          setShowEditDialog(true)
+                        }}>
+                          <Pencil className="h-4 w-4 text-blue-500" />
+                        </Button>
+                        <Button variant="outline" size="icon" onClick={() => setDeleteId(user.id)}>
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -195,6 +238,48 @@ export default function UsersPage() {
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setShowAddDialog(false)}>Batal</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                Simpan
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+            <DialogDescription>Update data user. Kosongkan password jika tidak ingin mengganti.</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleUpdate} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Nama</Label>
+              <Input id="edit-name" name="name" defaultValue={editUser?.name} required />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-email">Email</Label>
+              <Input id="edit-email" name="email" type="email" defaultValue={editUser?.email} required />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-password">Password (Opsional)</Label>
+              <Input id="edit-password" name="password" type="password" placeholder="Biarkan kosong jika tidak diubah" />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-role">Role</Label>
+              <Select name="role" defaultValue={editUser?.role}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ADMIN">Admin</SelectItem>
+                  <SelectItem value="GURU">Guru</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setShowEditDialog(false)}>Batal</Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Simpan

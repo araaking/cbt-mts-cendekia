@@ -19,7 +19,7 @@ async function main() {
 
   // Create Admin User
   const admin = await prisma.user.upsert({
-    where: { email: "admin@mtscendekia.sch.id" },
+    where: { email: "admin@mtscendekiamandiri.id" },
     update: {
       accounts: {
         updateMany: {
@@ -32,7 +32,7 @@ async function main() {
     },
     create: {
       id: "admin-001",
-      email: "admin@mtscendekia.sch.id",
+      email: "admin@mtscendekiamandiri.id",
       name: "Administrator",
       emailVerified: true,
       role: "ADMIN",
@@ -50,40 +50,6 @@ async function main() {
   });
 
   console.log(`✅ Admin created/updated: ${admin.email}`);
-
-  // Create Guru User
-  const guru = await prisma.user.upsert({
-    where: { email: "guru@mtscendekia.sch.id" },
-    update: {
-      accounts: {
-        updateMany: {
-          where: { providerId: "credential" },
-          data: {
-            password: passwordHash,
-          },
-        },
-      },
-    },
-    create: {
-      id: "guru-001",
-      email: "guru@mtscendekia.sch.id",
-      name: "Guru Matematika",
-      emailVerified: true,
-      role: "GURU",
-      accounts: {
-        create: {
-          id: "account-guru-001",
-          accountId: "guru-001",
-          providerId: "credential",
-          password: passwordHash,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      },
-    },
-  });
-
-  console.log(`✅ Guru created/updated: ${guru.email}`);
 }
 
 main()
