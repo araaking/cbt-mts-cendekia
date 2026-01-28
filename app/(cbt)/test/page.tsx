@@ -7,8 +7,15 @@ import { testService } from "@/features/test/services/test.service";
 
 export const dynamic = "force-dynamic";
 
+type AvailableTest = {
+    id: string
+    title: string
+    description: string | null
+    duration: number
+}
+
 export default async function TestListPage() {
-    const tests = await testService.getAvailableTests();
+    const tests = await testService.getAvailableTests() as AvailableTest[];
 
     return (
         <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans">

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Loader2, Save, Power, Trash2 } from "lucide-react"
+import { ArrowLeft, Loader2, Save, Power, Trash2, Copy, RotateCcw } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import {
   Dialog,
@@ -39,6 +39,9 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showResetDialog, setShowResetDialog] = useState(false)
+  const [isDuplicating, setIsDuplicating] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
 
   useEffect(() => {
     fetch(`/api/admin/tests/${testId}`)
@@ -101,6 +104,45 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
     }
   }
 
+  const handleDuplicate = async () => {
+    setIsDuplicating(true)
+    try {
+      const res = await fetch(`/api/admin/tests/${testId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "duplicate" }),
+      })
+      if (!res.ok) throw new Error()
+      const newTest = await res.json()
+      toast({ title: "Berhasil", description: "Tes berhasil diduplikat" })
+      router.push(`/tests/${newTest.id}`)
+    } catch {
+      toast({ title: "Error", description: "Gagal menduplikat tes", variant: "destructive" })
+    } finally {
+      setIsDuplicating(false)
+    }
+  }
+
+  const handleResetResults = async () => {
+    setIsResetting(true)
+    try {
+      const res = await fetch(`/api/admin/tests/${testId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "resetResults" }),
+      })
+      if (!res.ok) throw new Error()
+      const updatedTest = await res.json()
+      setTest(updatedTest)
+      setShowResetDialog(false)
+      toast({ title: "Berhasil", description: "Data peserta berhasil direset" })
+    } catch {
+      toast({ title: "Error", description: "Gagal mereset data peserta", variant: "destructive" })
+    } finally {
+      setIsResetting(false)
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -133,6 +175,10 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleDuplicate} disabled={isDuplicating}>
+            {isDuplicating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Copy className="h-4 w-4" />}
+            <span className="ml-2 hidden sm:inline">Duplikat</span>
+          </Button>
           <Button variant="outline" asChild>
             <Link href={`/tests/${testId}/import`}>Import Soal (Word)</Link>
           </Button>
@@ -193,6 +239,16 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
               <p className="text-sm text-slate-500">Total Peserta</p>
               <p className="text-2xl font-bold">{test.results.length}</p>
             </div>
+            {hasResults && (
+              <Button 
+                variant="outline" 
+                className="w-full text-orange-600 border-orange-300 hover:bg-orange-50"
+                onClick={() => setShowResetDialog(true)}
+              >
+                <RotateCcw className="mr-2 h-4 w-4" />
+                Reset Peserta
+              </Button>
+            )}
             <Link href={`/tests/${testId}/questions`}>
               <Button className="w-full">Kelola Soal</Button>
             </Link>
@@ -211,6 +267,24 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>Batal</Button>
             <Button variant="destructive" onClick={handleDelete}>Hapus</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reset Data Peserta?</DialogTitle>
+            <DialogDescription>
+              Semua data hasil tes ({test.results.length} peserta) akan dihapus permanen. Tes akan bisa diedit kembali setelah reset.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowResetDialog(false)}>Batal</Button>
+            <Button variant="destructive" onClick={handleResetResults} disabled={isResetting}>
+              {isResetting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Reset Peserta
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

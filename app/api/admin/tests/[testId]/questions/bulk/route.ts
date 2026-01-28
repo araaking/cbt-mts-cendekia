@@ -112,13 +112,14 @@ export async function POST(
         };
     }));
 
-    // Transaction for bulk create
+    // Interactive transaction for bulk create with extended timeout
     await prisma.$transaction(
-      processedQuestions.map((q) =>
-        prisma.question.create({
-          data: q,
-        })
-      )
+      async (tx) => {
+        for (const q of processedQuestions) {
+          await tx.question.create({ data: q });
+        }
+      },
+      { timeout: 60000 }
     );
 
     return NextResponse.json({ success: true, count: questions.length });

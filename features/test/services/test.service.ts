@@ -43,6 +43,14 @@ export class TestService {
     return testRepository.delete(id);
   }
 
+  async duplicateTest(id: string) {
+    return testRepository.duplicate(id);
+  }
+
+  async resetTestResults(id: string) {
+    return testRepository.resetResults(id);
+  }
+
   async getAvailableTests() {
     return testRepository.getActiveTests();
   }

@@ -8,8 +8,17 @@ import { testService } from "@/features/test/services/test.service"
 
 export const dynamic = "force-dynamic"
 
+type TestItem = {
+  id: string
+  title: string
+  duration: number
+  isActive: boolean
+  questions: { id: string }[]
+  results: { id: string }[]
+}
+
 export default async function TestsPage() {
-  const tests = await testService.getAllTests(true)
+  const tests = await testService.getAllTests(true) as TestItem[]
 
   return (
     <div className="p-6 space-y-6">

@@ -2,6 +2,18 @@ import { questionService } from "@/features/question/services/question.service";
 import { resultService } from "@/features/result/services/result.service";
 import { NextResponse } from "next/server";
 
+type Question = {
+  id: string
+  testId: string
+  question: string
+  image: string | null
+  options: unknown
+  correctAnswer: string
+  order: number
+  createdAt: Date
+  updatedAt: Date
+}
+
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -31,7 +43,7 @@ export async function GET(req: Request) {
     }
 
     // Get questions for the test
-    const questions = await questionService.getQuestionsByTestId(result.testId);
+    const questions = await questionService.getQuestionsByTestId(result.testId) as Question[];
 
     // Remove correct answers from response!!! Critical for security.
     const sanitizedQuestions = questions.map((q) => {
