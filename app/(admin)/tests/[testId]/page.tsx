@@ -9,6 +9,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { ArrowLeft, Loader2, Save, Power, Trash2, Copy, RotateCcw } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import {
@@ -19,6 +26,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+
+const DURATION_PRESETS = [15, 30, 45, 60, 90, 120, 180] as const
 
 type Test = {
   id: string
@@ -42,6 +51,11 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
   const [showResetDialog, setShowResetDialog] = useState(false)
   const [isDuplicating, setIsDuplicating] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
+  const [duration, setDuration] = useState("")
+
+  useEffect(() => {
+    if (test) setDuration(String(test.duration))
+  }, [test])
 
   useEffect(() => {
     fetch(`/api/admin/tests/${testId}`)
@@ -211,8 +225,20 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
                 <Textarea id="description" name="description" defaultValue={test.description || ""} rows={3} disabled={hasResults} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="duration">Durasi (menit)</Label>
-                <Input id="duration" name="duration" type="number" defaultValue={test.duration} required disabled={hasResults} />
+                <Label htmlFor="duration">Durasi</Label>
+                <Select value={duration} onValueChange={setDuration} disabled={hasResults}>
+                  <SelectTrigger id="duration" className="w-full">
+                    <SelectValue placeholder="Pilih durasi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DURATION_PRESETS.map((d) => (
+                      <SelectItem key={d} value={String(d)}>
+                        {d} menit
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <input type="hidden" name="duration" value={duration} />
               </div>
               {hasResults && (
                 <p className="text-sm text-orange-600">Tes tidak dapat diedit karena sudah ada peserta.</p>

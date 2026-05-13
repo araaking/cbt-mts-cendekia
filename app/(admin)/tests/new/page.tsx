@@ -8,13 +8,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { ArrowLeft, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+
+const DURATION_PRESETS = [15, 30, 45, 60, 90, 120, 180] as const
 
 export default function NewTestPage() {
   const router = useRouter()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const [duration, setDuration] = useState("90")
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -78,8 +88,20 @@ export default function NewTestPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="duration">Durasi (menit)</Label>
-              <Input id="duration" name="duration" type="number" min="1" defaultValue="60" required />
+              <Label htmlFor="duration">Durasi</Label>
+              <Select value={duration} onValueChange={setDuration}>
+                <SelectTrigger id="duration" className="w-full">
+                  <SelectValue placeholder="Pilih durasi" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DURATION_PRESETS.map((d) => (
+                    <SelectItem key={d} value={String(d)}>
+                      {d} menit
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <input type="hidden" name="duration" value={duration} />
             </div>
 
             <div className="flex gap-4 pt-4">
