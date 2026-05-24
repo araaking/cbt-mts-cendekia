@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { FileDown } from "lucide-react"
 import { resultService } from "@/features/result/services/result.service"
 
 export const dynamic = "force-dynamic"
@@ -16,9 +18,17 @@ export default async function ResultsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-800">Hasil Tes</h1>
-        <p className="text-slate-500">Lihat semua hasil tes peserta</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800">Hasil Tes</h1>
+          <p className="text-slate-500">Lihat semua hasil tes peserta</p>
+        </div>
+        <a href="/api/admin/results/export">
+          <Button variant="outline" className="gap-2">
+            <FileDown className="h-4 w-4" />
+            Export Excel
+          </Button>
+        </a>
       </div>
 
       <Card>
