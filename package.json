@@ -32,6 +32,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "docx": "^9.5.1",
+    "exceljs": "^4.4.0",
     "lucide-react": "^0.562.0",
     "mammoth": "^1.11.0",
     "next": "16.1.4",
@@ -41,8 +42,7 @@
     "react-dom": "19.2.3",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7",
-    "xlsx": "^0.18.5"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -50,7 +50,6 @@
     "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/xlsx": "^0.0.35",
     "eslint": "^9",
     "eslint-config-next": "16.1.4",
     "prisma": "^7.3.0",
