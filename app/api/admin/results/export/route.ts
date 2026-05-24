@@ -43,7 +43,7 @@ export async function GET() {
     headerRow.font = { bold: true };
     headerRow.alignment = { horizontal: "center" };
 
-    const buffer = (await workbook.xlsx.writeBuffer()) as Buffer;
+    const buffer = await workbook.xlsx.writeBuffer();
 
     return new Response(buffer, {
       headers: {
